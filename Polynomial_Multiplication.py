@@ -24,4 +24,25 @@ def poly_multiplication_Alg1(P, Q):
         ANS[n/2] = AD + BC
         ANS[n] = BD
         return ANS
-        
+
+def poly_multiplication_Karatsuba(P, Q):
+    # P and Q are two polynomials of degree n
+    # Runs in O(n^1.58)
+    n = len(P)
+    if n == 1:
+        return [P[0] * Q[0]]
+    
+    else:
+        A = P[:n//2]
+        B = P[n//2:]
+        C = Q[:n//2]
+        D = Q[n//2:]
+        AC = poly_multiplication_Karatsuba(A, C)
+        BD = poly_multiplication_Karatsuba(B, D)
+        AD_plus_BC = poly_multiplication_Karatsuba(A + B, C + D)
+        AD = AD_plus_BC - AC - BD
+        ANS = [0] * n
+        ANS[0] = AC
+        ANS[n/2] = AD
+        ANS[n] = BD
+        return ANS
