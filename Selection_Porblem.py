@@ -1,34 +1,44 @@
-def selection_problem_naive(A, k):
-    # Find the kth smallest element in A
+def selection_problem_naive(Array, k):
+    # Find the kth smallest element in Array
     # Runs in O(nlogn)
-    A.sort()
-    return A[k-1]
+    Array.sort()
+    return Array[k-1]
 
-def median(A):
-    # Find the median of A
-    # A will always be small
-    A.sort()
-    n = len(A)
+def median(Array):
+    # Find the median of Array
+    # Array will always be small
+    Array.sort()
+    n = len(Array)
     if n % 2 == 0:
-        return (A[n//2] + A[n//2 - 1]) / 2
+        return (Array[n//2] + Array[n//2 - 1]) / 2
     else:
-        return A[n//2]
+        return Array[n//2]
 
-def pivot_Alg1(A, k):
-    # Find the kth smallest element in A
+def pivot_Alg1(Array):
+    # Find the pivot of Array
     # Runs in O(1)
-    n = len(A)
-    return median([A[0], A[n//2], A[n-1]])
+    n = len(Array)
+    return median([Array[0], Array[n//2], Array[n-1]])
     
-def pivot_Alg2(A, k):
-    # Find the kth smallest element in A
+def pivot_Alg2(Array):
+    # Find the pivot of Array
     # Runs in O(n)
-    n = len(A)
-    g = 5
-    M = []
-    for i in range(n//g):
-        M.append(median(A[g*i:g*i+g]))
-    return Select(M, (1 + n/g)/2, 2)
+    GROUP_SIZE = 5
+    if len(Array) <= GROUP_SIZE:
+        return median(Array)
+    n = len(Array)
+    Medians = []
+    for i in range(n//GROUP_SIZE):
+        Medians.append(median(Array[GROUP_SIZE*i:GROUP_SIZE*i+GROUP_SIZE]))
+    return Select(Medians, (1 + n//GROUP_SIZE)/2, 2)
 
-def Select(A, k, alg):
-    pivot = pivot_Alg1(A, k) if alg == 1 else pivot_Alg2(A, k)
+def Select(Array, k, alg):
+    pivot = pivot_Alg1(Array, k) if alg == 1 else pivot_Alg2(Array, k)
+    Less, Equal, Greater = [], [], []
+    for element in Array:
+        if element < pivot:
+            Less.append(element)
+        elif element == pivot:
+            Equal.append(element)
+        else:
+            Greater.append(element)
